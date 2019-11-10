@@ -5,7 +5,7 @@ namespace BikeRental.models
 {
     public class Customer
     {
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
 
         [Required]
         public Genders Gender { get; set; }

@@ -8,9 +8,13 @@ namespace BikeRental.models
         public int RentalId;
 
         [Required]
+        public int CustomerId;
+
         public Customer Customer;
 
         [Required]
+        public int BikeId;
+
         public Bike Bike;
 
         [Required]
