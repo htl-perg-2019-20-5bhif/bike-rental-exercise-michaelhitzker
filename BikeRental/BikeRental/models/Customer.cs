@@ -5,10 +5,26 @@ namespace BikeRental.models
 {
     public class Customer
     {
-        public int CustomerId { get; set; }
+        public int Id { get; set; }
+
+        private string GenderValue = "";
 
         [Required]
-        public Genders Gender { get; set; }
+        public string Gender
+        {
+            get
+            {
+                return GenderValue;
+            }
+            set
+            {
+                if (!value.Equals("Male") && !value.Equals("Female") && !value.Equals("Unknown"))
+                {
+                    throw new ArgumentException("Not a valid gender");
+                }
+                GenderValue = value;
+            }
+        }
 
         [Required]
         [MaxLength(50)]
@@ -18,18 +34,19 @@ namespace BikeRental.models
         [MaxLength(75)]
         public string Lastname { get; set; }
 
+        private DateTime BirthdayValue = DateTime.MaxValue;
         [Required]
-        public DateTime Birthday { get { return Birthday; } set { Birthday = value.Date; } }
+        public DateTime Birthday { get { return BirthdayValue; } set { BirthdayValue = value.Date; } }
 
         [Required]
         [MaxLength(75)]
         public string Street { get; set; }
 
-        [MaxLength(10)]
+        [Range(minimum: 0, maximum: 1000000000)]
         public int HouseNumber { get; set; }
 
         [Required]
-        [MaxLength(10)]
+        [Range(minimum: 0, maximum: 1000000000)]
         public int ZipCode { get; set; }
 
         [Required]

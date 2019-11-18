@@ -5,10 +5,9 @@ namespace BikeRental
 {
     public class BikeRentalDataContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=MICHAS-BLECHHAU;Database=BikeRental;Integrated Security=SSPI");
-        }
+        public BikeRentalDataContext(DbContextOptions<BikeRentalDataContext> options)
+        : base(options)
+        { }
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Bike> Bikes { get; set; }

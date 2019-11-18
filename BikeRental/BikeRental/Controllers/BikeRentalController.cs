@@ -1,9 +1,4 @@
-﻿using BikeRental.models;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace BikeRental.Controllers
 {
@@ -11,12 +6,11 @@ namespace BikeRental.Controllers
     [Route("[controller]")]
     public class BikeRentalController : ControllerBase
     {
-        private BikeRentalDataContext context = new BikeRentalDataContext();
 
         public BikeRentalController()
         {
         }
-
+        /*
         [HttpGet]
         [Route("/customers", Name = "GetCustomers")]
         public IActionResult GetCustomers([FromQuery] string lastName)
@@ -227,10 +221,10 @@ namespace BikeRental.Controllers
 
         [HttpGet]
         [Route("/rentals/unpaid", Name = "GetUnpaidRentals")]
-        public async Task<IActionResult> GetUnpaidRentals()
+        public IActionResult GetUnpaidRentals()
         {
             var unpaidRentals = from rental in context.Rentals
-                                where rental.RentalEnd != null && !rental.Paid
+                                where rental.RentalEnd != null && !rental.Paid && rental.Total > 0
                                 select new { rental.CustomerId, rental.Customer.Firstname, rental.Customer.Lastname, rental.RentalId, rental.RentalBegin, rental.RentalEnd, rental.Total };
 
             if (unpaidRentals.Count() <= 0)
@@ -242,7 +236,20 @@ namespace BikeRental.Controllers
 
         private double CalculateCosts(Rental rental)
         {
-            return 0.0;
+            var minutes = (rental.RentalEnd - rental.RentalBegin).Minutes;
+            var firstHourCosts = rental.Bike.RentalPriceFirstHour;
+            if (minutes <= 15)
+            {
+                return 0.0;
+            }
+            if (minutes <= 60)
+            {
+                return firstHourCosts;
+            }
+            var additionalHours = (int)Math.Ceiling((minutes - 60.0) / 60.0);
+            var additionalCosts = additionalHours * rental.Bike.RentalPriceAdditionalHour;
+            var total = firstHourCosts + additionalCosts;
+            return total;
         }
 
         private List<Bike> GetAvailableBikes()
@@ -253,6 +260,6 @@ namespace BikeRental.Controllers
                         where rental.RentalEnd == null
                         select bike;
             return bikes.ToList();
-        }
+        }*/
     }
 }

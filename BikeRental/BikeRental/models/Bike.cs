@@ -5,49 +5,68 @@ namespace BikeRental.models
 {
     public class Bike
     {
-        public int BikeId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(25)]
         public string Brand { get; set; }
 
+        private DateTime PurchaseDateValue = DateTime.MaxValue;
+
         [Required]
-        public DateTime PurchaseDate { get { return PurchaseDate; } set { PurchaseDate = value.Date; } }
+        public DateTime PurchaseDate { get { return PurchaseDateValue; } set { PurchaseDateValue = value.Date; } }
 
         [MaxLength(1000)]
         public string Notes { get; set; }
 
-        public DateTime DateOfLastService { get { return DateOfLastService; } set { DateOfLastService = value.Date; } }
+        private DateTime DateOfLastServiceValue = DateTime.MaxValue;
+
+        public DateTime DateOfLastService { get { return DateOfLastServiceValue; } set { DateOfLastServiceValue = value.Date; } }
+
+        private double RentalPriceFirstHourValue = 0;
 
         [Required]
+        [Range(minimum: 0, maximum: double.MaxValue)]
         public double RentalPriceFirstHour
         {
-            get { return RentalPriceFirstHour; }
+            get { return RentalPriceFirstHourValue; }
             set
             {
-                if (value <= 0)
-                {
-                    throw new ArgumentException("Rental price must be greater than 0!");
-                }
-                RentalPriceFirstHour = Math.Round(value, 2);
+                RentalPriceFirstHourValue = Math.Round(value, 2);
             }
         }
 
+        private double RentalPriceAdditionalHourValue = 0;
+
         [Required]
+        [Range(minimum: 0, maximum: double.MaxValue)]
         public double RentalPriceAdditionalHour
         {
-            get { return RentalPriceAdditionalHour; }
+            get { return RentalPriceAdditionalHourValue; }
             set
             {
-                if (value <= 0)
-                {
-                    throw new ArgumentException("Rental price must be greater than 0!");
-                }
-                RentalPriceAdditionalHour = Math.Round(value, 2);
+                RentalPriceAdditionalHourValue = Math.Round(value, 2);
             }
         }
 
+        private string BikeCategoryValue = "";
+
         [Required]
-        public BikeCategories BikeCategory { get; set; }
+        public string BikeCategory
+        {
+            get
+            {
+                return BikeCategoryValue;
+            }
+
+            set
+            {
+                if (!value.Equals("StandardBike") && !value.Equals("MountainBike") && !value.Equals("TreckingBike") && !value.Equals("RacingBike"))
+                {
+                    throw new ArgumentException("Not a valid BikeCategory");
+                }
+                BikeCategoryValue = value;
+            }
+        }
     }
 }

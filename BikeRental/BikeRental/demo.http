@@ -1,0 +1,50 @@
+@host = http://localhost:5000/api
+
+###
+POST {{host}}/customers
+Content-Type: application/json
+
+{
+    "gender": "Male",
+    "firstname": "Michael",
+    "lastname": "Hitzker",
+    "birthday": "2000-11-11T00:00:00",
+    "street": "Sample Alley",
+    "houseNumber": 17,
+    "zipCode": 399233,
+    "town": "Exampleville"
+}
+
+###
+GET {{host}}/customers?lastName=tzk
+
+GET {{host}}/customers/1/rentals
+
+###
+POST {{host}}/bikes
+Content-Type: application/json
+
+{
+    "brand": "TestBrandBike",
+    "purchaseDate": "2019-12-12T00:00:00",
+    "notes": "does work",
+    "rentalPriceFirstHour": 15,
+    "rentalPriceAdditionalHour":91,
+    "bikeCategory": "MountainBike"
+}
+
+###
+GET {{host}}/bikes?sortedBy=purchaseDate
+
+###
+POST {{host}}/rentals/start?customerId=1&bikeId=2
+Content-Type: application/json
+
+###
+POST {{host}}/rentals/end?rentalId=10
+
+###
+GET {{host}}/rentals/unpaid
+
+###
+POST {{host}}/rentals/pay?rentalId=5
