@@ -56,7 +56,7 @@ namespace BikeRental.Controllers
             {
                 return NotFound("A rental with that id does not exist!");
             }
-            rental.RentalEnd = DateTime.Now.AddMinutes(130);
+            rental.RentalEnd = DateTime.Now;
             var rentalCosts = priceCalculator.CalculateCosts(rental);
             rental.Total = rentalCosts;
             _context.Rentals.Update(rental);
