@@ -12,10 +12,12 @@ namespace BikeRental.Controllers
     public class RentalsController : ControllerBase
     {
         private readonly BikeRentalDataContext _context;
+        private readonly ICalculatePrices priceCalculator;
 
-        public RentalsController(BikeRentalDataContext context)
+        public RentalsController(BikeRentalDataContext context, ICalculatePrices priceCalculator)
         {
             _context = context;
+            this.priceCalculator = priceCalculator;
         }
 
 
@@ -55,7 +57,7 @@ namespace BikeRental.Controllers
                 return NotFound("A rental with that id does not exist!");
             }
             rental.RentalEnd = DateTime.Now.AddMinutes(130);
-            var rentalCosts = CalculateCosts(rental);
+            var rentalCosts = priceCalculator.CalculateCosts(rental);
             rental.Total = rentalCosts;
             _context.Rentals.Update(rental);
             await _context.SaveChangesAsync();
@@ -96,27 +98,6 @@ namespace BikeRental.Controllers
                 return NotFound();
             }
             return Ok(unpaidRentals);
-        }
-
-        private double CalculateCosts(Rental rental)
-        {
-            var minutes = (rental.RentalEnd - rental.RentalBegin).TotalMinutes;
-
-            Console.WriteLine(minutes + "######################## asdfasdfasdfdsdaf");
-            var firstHourCosts = rental.Bike.RentalPriceFirstHour;
-            if (minutes <= 15)
-            {
-                return 0.0;
-            }
-            if (minutes <= 60)
-            {
-                return firstHourCosts;
-            }
-            var additionalHours = (int)Math.Ceiling((minutes - 60.0) / 60.0);
-            Console.WriteLine(additionalHours + "######################## ");
-            var additionalCosts = additionalHours * rental.Bike.RentalPriceAdditionalHour;
-            var total = firstHourCosts + additionalCosts;
-            return total;
         }
 
         private bool RentalExists(int id)
